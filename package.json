@@ -1,19 +1,16 @@
 {
-  "name": "angular-directive-seed",
-  "version": "0.0.0",
-  "description": "A starting point for angular directives.",
-  "homepage": "https://github.com/Jimdo/angular-directive-seed",
-  "author": "Jimdo GmbH",
-  "maintainers": [
-    "Hannes Diercks <hannes.diercks@jimdo.com>",
-    "Joscha Feth <joscha@feth.com>",
-    "Hauke Stange <hauke@jimdo.com>"
-  ],
-  "contributors": [],
+  "name": "ngImageInputWithPreview",
+  "version": "0.0.1",
+  "description": "A FileReader based directive to easily preview and upload image files.",
+  "homepage": "https://github.com/deiwin/ngImageInputWithPreview",
+  "author": "Deiwin Sarjas <deiwin.sarjas@gmail.com>",
   "main": "Gruntfile.js",
   "keywords": [
     "directive",
-    "angular"
+    "angular",
+    "file",
+    "image",
+    "input"
   ],
   "scripts": {
     "test": "grunt test",
@@ -21,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/Jimdo/angular-directive-seed.git"
+    "url": "https://github.com/deiwin/ngImageInputWithPreview.git"
   },
   "license": "MIT",
   "devDependencies": {
@@ -48,6 +45,7 @@
     "grunt-shell": "~1.1.1",
     "grunt-protractor-webdriver": "^0.2.0",
     "jasmine-spec-reporter": "^1.1.0",
+    "karma": "~0.12.31",
     "karma-chrome-launcher": "~0.1.6",
     "karma-coffee-preprocessor": "~0.2.1",
     "karma-coverage": "^0.2.7",

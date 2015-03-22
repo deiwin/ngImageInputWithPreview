@@ -1,16 +1,17 @@
 {
-  "name": "angular-directive-seed",
+  "name": "ngImageInputWithPreview",
   "version": "0.0.0",
   "authors": [
-    "Hannes Diercks <hannes.diercks@jimdo.com>",
-    "Joscha Feth <joscha@feth.com>",
-    "Hauke Stange <hauke@jimdo.com>"
+    "Deiwin Sarjas <deiwin.sarjas@gmail.com>"
   ],
-  "description": "A starting point for angular directives.",
-  "main": "dist/angular-directive-seed.js",
+  "description": "A FileReader based directive to easily preview and upload image files.",
+  "main": "dist/ngImageInputWithPreview.js",
   "keywords": [
     "directive",
-    "angular"
+    "angular",
+    "file",
+    "image",
+    "input"
   ],
   "license": "MIT",
   "private": true,
