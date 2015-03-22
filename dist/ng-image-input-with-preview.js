@@ -1,5 +1,5 @@
 /*!
- * ng-image-input-with-preview v0.0.4
+ * ng-image-input-with-preview v0.0.5
  * https://github.com/deiwin/ngImageInputWithPreview
  *
  * A FileReader based directive to easily preview and upload image files.
@@ -69,8 +69,13 @@
   
     module.directive('imageWithPreview', ['fileReader', '$q',
       function(fileReader, $q) {
+        var DEFAULT_MIMETYPES = 'image/png,image/jpeg';
         var NOT_AN_IMAGE = 'this-is-not-an-image';
+  
         var isAnAllowedImage = function(allowedTypes, file) {
+          if (!allowedTypes) {
+            allowedTypes = DEFAULT_MIMETYPES;
+          }
           var allowedTypeArray = allowedTypes.split(',');
           return allowedTypeArray.some(function(allowedType) {
             if (allowedType === file.type) {
@@ -82,6 +87,7 @@
               allowedTypeSplit[0] === fileTypeSplit[0];
           });
         };
+  
         return {
           restrict: 'A',
           require: 'ngModel',
