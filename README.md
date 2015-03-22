@@ -11,7 +11,7 @@ A FileReader based Angular directive to easily preview and upload image files.
 Installation
 ----------
 
-	npm install --save ngImageInputWithPreview
+	npm install --save ng-image-input-with-preview
 
 or
 
@@ -28,6 +28,8 @@ Getting started
 	</span>
 	<img ng-show="image.src" ng-src="{{image.src}}"/>
 </form>
+
+<script type="text/javascript" src="path/to/ng-image-input-with-preview.js"></script>
 ```
 
 Demo !
