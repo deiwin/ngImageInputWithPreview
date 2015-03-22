@@ -25,11 +25,13 @@ module.exports = {
     },
     reporters: (reporters || 'progress').split(',').concat('coverage'),
     singleRun: true,
-    files: files.environments.karma.concat([files.unitTests])
   },
   all: {
     options: {
       browsers: (browsers || DEFAULT_BROWSERS).split(',')
+    },
+    files: {
+      src: files.environments.karma.concat([files.unitTests])
     }
   },
   watch: {
