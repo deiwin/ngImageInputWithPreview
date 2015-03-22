@@ -9,14 +9,16 @@
   module.directive('imageWithPreview', ['fileReader', '$q',
     function(fileReader, $q) {
       var NOT_AN_IMAGE = 'this-is-not-an-image';
-      var isAnAllowedImage = function(file) {
-        return ['image/png', 'image/jpeg'].indexOf(file.type) > -1;
+      var isAnAllowedImage = function(allowedTypes, file) {
+        var allowedTypeArray = allowedTypes.split(',');
+        return allowedTypeArray.indexOf(file.type) > -1;
       };
       return {
         restrict: 'A',
         require: 'ngModel',
         scope: {
           image: '=ngModel',
+          allowedTypes: '@accept',
         },
         link: function($scope, element, attrs, ngModel) {
           element.bind('change', function(event) {
@@ -30,7 +32,7 @@
             if (!file) {
               return file;
             }
-            if (!isAnAllowedImage(file)) {
+            if (!isAnAllowedImage($scope.allowedTypes, file)) {
               return NOT_AN_IMAGE;
             }
             return {
@@ -38,7 +40,7 @@
             };
           });
           $scope.$watch('image', function(value) {
-            if(value && typeof value === 'string') {
+            if (value && typeof value === 'string') {
               $scope.image = {
                 src: value,
                 isPath: true,

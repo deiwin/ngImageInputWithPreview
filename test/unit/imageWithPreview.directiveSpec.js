@@ -18,7 +18,7 @@ describe('ngImageInputWithPreview', function() {
       // using <p> instead of <input> because browser's don't allow setting the
       // 'file' property on the input element and therefore make this more
       // difficult to test
-      var compiled = compile('<p image-with-preview ng-model="image"/>');
+      var compiled = compile('<p image-with-preview ng-model="image" accept="image/mockedpng,image/png"/>');
       element = compiled.element;
       $parentScope = compiled.parentScope;
     });
@@ -43,6 +43,26 @@ describe('ngImageInputWithPreview', function() {
 
       it('should not set the data url', function() {
         expect($parentScope.image).toBeUndefined();
+      });
+    });
+
+    describe('with an image with a specified (mocked) mimetype selected', function() {
+      var result, file;
+      beforeEach(inject(function($q, fileReader) {
+        var deferred = $q.defer();
+        result = 'result data';
+        deferred.resolve(result);
+        fileReader.readAsDataUrl = jasmine.createSpy().and.returnValue(deferred.promise);
+
+        file = {
+          type: 'image/mockedpng',
+        };
+        element.prop('files', [file]);
+        element.triggerHandler('change');
+      }));
+
+      it('should set the data url the result', function() {
+        expect($parentScope.image.src).toEqual(result);
       });
     });
 
