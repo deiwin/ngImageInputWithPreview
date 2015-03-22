@@ -11,7 +11,15 @@
       var NOT_AN_IMAGE = 'this-is-not-an-image';
       var isAnAllowedImage = function(allowedTypes, file) {
         var allowedTypeArray = allowedTypes.split(',');
-        return allowedTypeArray.indexOf(file.type) > -1;
+        return allowedTypeArray.some(function(allowedType) {
+          if (allowedType === file.type) {
+            return true;
+          }
+          var allowedTypeSplit = allowedType.split('/');
+          var fileTypeSplit = file.type.split('/');
+          return allowedTypeSplit.length === 2 && fileTypeSplit.length === 2 && allowedTypeSplit[1] === '*' &&
+            allowedTypeSplit[0] === fileTypeSplit[0];
+        });
       };
       return {
         restrict: 'A',
