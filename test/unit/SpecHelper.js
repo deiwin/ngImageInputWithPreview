@@ -3,69 +3,29 @@
  */
 /* jshint undef: false, unused: false  */
 
-/* some globals we might need later on, set in initGlobals */
-var basicGlobals = [
-  '$rootScope',
-  '$compile',
-  '$injector',
-  '$httpBackend',
-  '$q',
-  '$controller'
-];
-
-/**
- * Initiate the angular module we want to test on and initiate
- * global angular modules required for testing (like $rootScope etc.)
- *
- * @param {bool} [withModule]  disable automatic module initiation
- *                             (by default, the module is initiated
- *                             automatically for you)
- * @paran {array} [additional] array of strings for additional modules
- *                             to be exposed on the window, can also be the first
- *                             parameter if withModule should be true
- */
-function initGlobals(withModule, additional) {
-  if (angular.isArray(withModule)) {
-    additional = withModule;
-    withModule = true;
-  }
-
-  if (!angular.isArray(additional)) {
-    additional = [];
-  }
-
-  if (withModule !== false) {
-    /* Initiate the main module */
-    module('myModule');
-  }
-
-  inject(function($injector) {
-    basicGlobals.concat(additional).forEach(function(global) {
-      initGlobals.cleanup.push({name: global, value: window[global]});
-      window[global] = $injector.get(global);
+function compile(html) {
+  var element, scope, parentScope;
+  inject(function($compile, $rootScope, $timeout) {
+    parentScope = $rootScope.$new();
+    // if (prepareParentFunction) {
+    //   parentScope.$apply(function() {
+    //     prepareParentFunction(parentScope);
+    //   });
+    // }
+    element = angular.element(html);
+    $compile(element)(parentScope);
+    $timeout(function() {
+      scope = element.isolateScope();
+      parentScope.$digest();
     });
+    $timeout.flush();
   });
-}
-initGlobals.cleanup = [];
 
-function createDirective() {
-  if (!$compile) {
-    throw new Error('globals were not initiated');
-  }
-
-  var r = {};
-
-  /* Create the element for our directive */
-  r.elm = angular.element('<div my-directive>');
-
-  /* Apply the directive */
-  $compile(r.elm)($rootScope);
-  $rootScope.$digest();
-
-  /* Save a reference to the directive scope */
-  r.scope = r.elm.isolateScope() || r.elm.scope();
-
-  return r;
+  return {
+    element: element,
+    scope: scope,
+    parentScope: parentScope
+  };
 }
 
 /* Make sure, there are no unexpected request */
@@ -74,16 +34,4 @@ afterEach(function() {
     $httpBackend.verifyNoOutstandingExpectation();
     $httpBackend.verifyNoOutstandingRequest();
   }
-});
-
-/* Clean-up globals initiated by initGlobals */
-afterEach(function() {
-  initGlobals.cleanup.forEach(function(global) {
-    if (angular.isUndefined(global.value)) {
-      delete window[global.name];
-    } else {
-      window[global.name] = global.value;
-    }
-  });
-  initGlobals.cleanup = [];
 });
