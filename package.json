@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "test": "grunt test",
-    "postinstall": "bower install && ln -sf ./node_modules/grunt-cli/bin/grunt ./grunt && ./node_modules/protractor/bin/webdriver-manager update && ./grunt build"
+    "postinstall": "bower install && ln -sf ./node_modules/grunt-cli/bin/grunt ./grunt && ./grunt build"
   },
   "repository": {
     "type": "git",
@@ -27,7 +27,6 @@
     "connect-less": "^0.3.1",
     "glob": "~4.3.1",
     "grunt": "~0.4.5",
-    "grunt-angular-templates": "~0.5.7",
     "grunt-bump": "0.0.16",
     "grunt-cli": "~0.1.13",
     "grunt-contrib-concat": "~0.5.0",
@@ -41,9 +40,7 @@
     "grunt-ng-annotate": "^0.8.0",
     "grunt-npm": "https://github.com/Xiphe/grunt-npm/tarball/98187270151e53d45214d778de394a557e81958c",
     "grunt-parallel": "^0.3.1",
-    "grunt-protractor-runner": "~1.1.4",
     "grunt-shell": "~1.1.1",
-    "grunt-protractor-webdriver": "^0.2.0",
     "jasmine-spec-reporter": "^1.1.0",
     "karma": "~0.12.31",
     "karma-chrome-launcher": "~0.1.6",
@@ -57,7 +54,6 @@
     "karma-script-launcher": "~0.1.0",
     "karma-spec-reporter": "0.0.13",
     "load-grunt-tasks": "~1.0.0",
-    "mkdirp": "^0.5.0",
-    "protractor": "~1.4.0"
+    "mkdirp": "^0.5.0"
   }
 }

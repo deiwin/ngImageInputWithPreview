@@ -36,13 +36,6 @@ module.exports = {
   options: {
     hostname: '*'
   },
-  test: {
-    options: {
-      port: optPort || process.env.E2E_SANDBOX_PORT || 8765,
-      middleware: middleware('test/e2e/env', 'demo'),
-      base: baseDirs.concat('test/e2e/env')
-    }
-  },
   demo: {
     options: {
       port: optPort || process.env.DEMO_PORT || 8000,

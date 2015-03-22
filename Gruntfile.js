@@ -22,28 +22,17 @@ module.exports = function(grunt) {
   grunt.registerTask(
     'tdd',
     'Watch source and test files and execute tests on change',
-    function(suite) {
-      var tasks = [];
-      var watcher = '';
-      if (!suite || suite === 'unit') {
-        tasks.push('karma:watch:start');
-        watcher = 'watch:andtestunit';
-      }
-      if (!suite || suite === 'e2e') {
-        tasks.push('connect:test', 'protractor_webdriver');
-        watcher = 'watch:andteste2e';
-      }
-      if (!suite) {
-        watcher = 'watch:andtestboth';
-      }
-      tasks.push(watcher);
+    function() {
+      var tasks = [
+        'karma:watch:start',
+        'watch:andtestunit',
+      ];
       grunt.task.run(tasks);
     }
   );
 
   grunt.registerTask('demo', 'Start the demo app', [
     'connect:demo',
-    'shell:opendemo',
     'parallel:watchdemo'
   ]);
 
@@ -52,15 +41,13 @@ module.exports = function(grunt) {
   grunt.registerTask(
     'test',
     'Execute all the tests',
-    function(suite) {
-      var tasks = ['jshint', 'ngtemplates'];
-      if (!suite || suite === 'unit') {
-        process.env.defaultBrowsers = 'Firefox,Chrome';
-        tasks.push('shell:deleteCoverages', 'karma:all');
-      }
-      if (!suite || suite === 'e2e') {
-        tasks.push('connect:test', 'protractor:single');
-      }
+    function() {
+      var tasks = [
+        'jshint',
+        'shell:deleteCoverages',
+        'karma:all',
+      ];
+      process.env.defaultBrowsers = 'Firefox,Chrome';
       grunt.task.run(tasks);
     }
   );
@@ -69,7 +56,6 @@ module.exports = function(grunt) {
     'build',
     'Build dist files',
     [
-      'ngtemplates',
       'less:dist',
       'less:distmin',
       'concat:bannerToDistStyle',

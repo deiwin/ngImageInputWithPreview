@@ -16,13 +16,7 @@ var files = {
   distMin: 'dist/<%= pkg.name %>.min.js',
   dists: 'dist/*',
 
-  partialsDir: 'src/partials',
-  allHTML: '*.html',
-  allPartials: 'src/partials/*.html',
-  allPartialsCombined: '.tmp/all-partials.js',
-
   unitTests: ['test/unit/SpecHelper.+(js|coffee)', 'test/unit/**/*Spec.+(js|coffee)'],
-  e2eTests: ['test/e2e/SpecHelper.+(js|coffee)', 'test/e2e/*Spec.+(js|coffee)'],
 
   environments: {},
 
@@ -33,8 +27,7 @@ var files = {
 
 var baseEnvironment = [].concat(
   'bower_components/angular/angular.js',
-  files.source,
-  files.allPartialsCombined
+  files.source
 );
 
 var demoEnvironment = _.clone(baseEnvironment);

@@ -12,21 +12,6 @@ module.exports = {
     files: unitTestfiles,
     tasks: ['shell:deleteCoverages', 'ngtemplates', 'karma:watch:run']
   },
-  andteste2e: {
-    files: e2eTestfiles,
-    tasks: ['ngtemplates', 'protractor:tdd']
-  },
-  andtestboth: {
-    files: bothTestfiles,
-    tasks: ['shell:deleteCoverages', 'ngtemplates', 'karma:watch:run', 'protractor:tdd']
-  },
-  partials: {
-    files: files.allPartials,
-    tasks: ['ngtemplates'],
-    options: {
-      atBegin: true
-    },
-  },
   demo: {
     files: demoFiles,
     tasks: [],
