@@ -32,6 +32,22 @@ Getting started
 <script type="text/javascript" src="path/to/ng-image-input-with-preview.js"></script>
 ```
 
+Options
+-------
+
+```
+<input type="file" image-with-preview
+		ng-model="{string}"
+		accept="{string}">
+```
+
+### Parameters
+
+Name | Type | Description | Defaults to
+-|-
+ngModel (*required*)|`string`|Assignable angular expression to data-bind to. The data URL encoded image data will be available on the `src` property. If the angular expression is a string, it will be assumed to be an URL path to an image. The path will then be converted to an object with the path available on the `src` property and with the `isPath` property set to `true`.|-
+accept|`string`|Works similarly to the [HTML5 specification](https://html.spec.whatwg.org/multipage/forms.html#attr-input-accept) to restrict the input to certain mime types. Sets `image` validation error key if the user selected file does not match. *NB: File extensions are currently not supported.* |-
+
 Demo !
 ------
 
