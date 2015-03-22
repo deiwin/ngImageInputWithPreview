@@ -4,6 +4,6 @@ module.exports = {
       grunt: true,
       stream: true
     },
-    tasks: ['watch:partials', 'watch:demo']
+    tasks: ['watch:demo']
   }
 };
