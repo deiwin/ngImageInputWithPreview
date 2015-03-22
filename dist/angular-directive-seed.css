@@ -1,0 +1,14 @@
+/*!
+ * angular-directive-seed v0.0.0
+ * https://github.com/Jimdo/angular-directive-seed
+ *
+ * A starting point for angular directives.
+ *
+ * Copyright 2014, Jimdo GmbH
+ * Released under the MIT license
+ */
+[my-directive] {
+  background: blue;
+  height: 50px;
+  width: 50px;
+}

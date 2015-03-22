@@ -1,0 +1,21 @@
+language: node_js
+node_js:
+  - "0.10"
+
+env:
+  global:
+    - PROTRACTOR_BROWSERS=firefox
+    - KARMA_BROWSERS=Firefox,PhantomJS
+
+install:
+  - npm install
+
+before_script:
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
+script:
+  - grunt test --reporter=spec
+
+after_success:
+  - grunt coveralls
