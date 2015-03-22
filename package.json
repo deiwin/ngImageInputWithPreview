@@ -1,6 +1,6 @@
 {
   "name": "ng-image-input-with-preview",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A FileReader based directive to easily preview and upload image files.",
   "homepage": "https://github.com/deiwin/ngImageInputWithPreview",
   "author": "Deiwin Sarjas <deiwin.sarjas@gmail.com>",
