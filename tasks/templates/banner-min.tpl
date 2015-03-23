@@ -1,1 +1,0 @@
-/*! <%= pkg.name %> v<%= pkg.version %> */

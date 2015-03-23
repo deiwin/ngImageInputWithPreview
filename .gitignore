@@ -1,6 +1,0 @@
-bower_components/
-node_modules/
-npm-debug.log
-test/e2e/env/all-partials.js
-grunt
-.tmp
