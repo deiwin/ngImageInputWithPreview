@@ -7,6 +7,7 @@ ngImageInputWithPreview
 
 A FileReader based Angular directive to easily preview and upload image files.
 
+A live demo: http://deiwin.github.io/ngImageInputWithPreview/
 
 Installation
 ----------
