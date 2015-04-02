@@ -87,6 +87,9 @@
             });
           };
           ngModel.$asyncValidators.dimensions = function(modelValue, viewValue) {
+            if (!attrs.dimensions) {
+              return createResolvedPromise();
+            }
             var value = modelValue || viewValue;
             if (!value || !value.fileReaderPromise) {
               return createResolvedPromise();
@@ -96,10 +99,16 @@
               // creating an image lets us find out its dimensions after it's loaded
               var image = document.createElement('img');
               image.addEventListener('load', function() {
-                console.log(image.width);
-                console.log(image.height);
+                var valid = $scope.dimensionRestrictions({
+                  width: image.width,
+                  height: image.height,
+                });
                 $scope.$apply(function() {
-                  deferred.resolve();
+                  if (valid) {
+                    deferred.resolve();
+                  } else {
+                    deferred.reject('Invalid dimensions');
+                  }
                 });
               });
               image.addEventListener('error', function() {

@@ -12,13 +12,64 @@ describe('ngImageInputWithPreview', function() {
     });
   });
 
-  var testSelectUnselectShouldNotWork = function(type, context) {
+  var waitWhileThenRun = function(shouldContinue, f) {
+    // I'm sorry, but I don't know a better way to see if the validators have
+    // finished with a failure
+    var interval = setInterval(function() {
+      if (shouldContinue()) {
+        return;
+      }
+      clearInterval(interval);
+      f();
+    }, 50);
+  };
+
+  var testSelectUnselectWorks = function(type, context) {
+    var result, file, ngModel, element, $parentScope;
+    beforeEach(inject(function($q, fileReader) {
+      var deferred = $q.defer();
+      element = context.element;
+      $parentScope = context.$parentScope;
+      // a single pixel image
+      result = 'data:image/gif;base64,R0lGODlhAQABAPAAAP8REf///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==';
+      deferred.resolve(result);
+      fileReader.readAsDataUrl = jasmine.createSpy().and.returnValue(deferred.promise);
+
+      file = {
+        type: type,
+      };
+      element.prop('files', [file]);
+      ngModel = element.data('$ngModelController');
+    }));
+
+    it('should set the data url the result', function(done) {
+      ngModel.$viewChangeListeners.push(function() {
+        expect($parentScope.image.src).toEqual(result);
+        done();
+      });
+      element.triggerHandler('change');
+    });
+
+    describe('and then unselected', function() {
+      beforeEach(function() {
+        element.prop('files', [undefined]);
+        element.triggerHandler('change');
+      });
+
+      it('should set the data url to an empty string', function() {
+        expect($parentScope.image).toBeUndefined();
+        element.triggerHandler('change');
+      });
+    });
+  };
+
+  var testTextFile = function(context) {
     var file, ngModel, element, $parentScope;
     beforeEach(function() {
       element = context.element;
       $parentScope = context.$parentScope;
       file = {
-        type: type,
+        type: 'text/plain',
       };
       element.prop('files', [file]);
       element.triggerHandler('change');
@@ -49,31 +100,44 @@ describe('ngImageInputWithPreview', function() {
     });
   };
 
-  var testSelectUnselectWorks = function(type, context) {
-    var result, file, ngModel, element, $parentScope;
+  var testPNGFile = function(context) {
+    testSelectUnselectWorks('image/png', context);
+  };
+
+  var testDimensionsCheckFails = function(context) {
+    var file, ngModel, element, $parentScope;
     beforeEach(inject(function($q, fileReader) {
       var deferred = $q.defer();
       element = context.element;
       $parentScope = context.$parentScope;
       // a single pixel image
-      result = 'data:image/gif;base64,R0lGODlhAQABAPAAAP8REf///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==';
+      var result = 'data:image/gif;base64,R0lGODlhAQABAPAAAP8REf///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==';
       deferred.resolve(result);
       fileReader.readAsDataUrl = jasmine.createSpy().and.returnValue(deferred.promise);
-
       file = {
-        type: type,
+        type: 'image/png',
       };
       element.prop('files', [file]);
+      element.triggerHandler('change');
       ngModel = element.data('$ngModelController');
     }));
 
-    it('should set the data url the result', function(done) {
+    it('should not set the data url', function(done) {
+      waitWhileThenRun(function() {
+        return ngModel.$pending && Object.keys(ngModel.$pending).length > 0;
+      }, function() {
+        expect($parentScope.image).toBeUndefined();
+        done();
+      });
+    });
 
-        ngModel.$viewChangeListeners.push(function() {
-          expect($parentScope.image.src).toEqual(result);
-          done();
-        });
-        element.triggerHandler('change');
+    it('should have an error', function(done) {
+      waitWhileThenRun(function() {
+        return ngModel.$pending && Object.keys(ngModel.$pending).length > 0;
+      }, function() {
+        expect(ngModel.$error.dimensions).toBe(true);
+        done();
+      });
     });
 
     describe('and then unselected', function() {
@@ -82,22 +146,17 @@ describe('ngImageInputWithPreview', function() {
         element.triggerHandler('change');
       });
 
-      it('should set the data url to an empty string', function() {
+      it('should not set the data url', function() {
         expect($parentScope.image).toBeUndefined();
-        element.triggerHandler('change');
+      });
+
+      it('should not have an error', function() {
+        expect(ngModel.$error.image).toBeFalsy();
       });
     });
   };
 
-  var testTextFile = function(context) {
-    testSelectUnselectShouldNotWork('text/plain', context);
-  };
-
-  var testPNGFile = function(context) {
-    testSelectUnselectWorks('image/png', context);
-  };
-
-  describe('previewImage directive', function() {
+  describe('previewImage directive with attrs', function() {
     var element, $parentScope;
     var context = {};
     beforeEach(function() {
@@ -152,7 +211,89 @@ describe('ngImageInputWithPreview', function() {
     });
   });
 
-  describe('previewImage directive without accept attr', function() {
+  describe('previewImage directive', function() {
+    describe('with dimension restrictions set to true', function() {
+      var context = {};
+      beforeEach(function() {
+        // using <p> instead of <input> because browser's don't allow setting the
+        // 'file' property on the input element and therefore make this more
+        // difficult to test
+        var compiled = compile('<p image-with-preview ng-model="image" dimensions="true"/>');
+        context.element = compiled.element;
+        context.$parentScope = compiled.parentScope;
+      });
+
+      describe('with an image selected', function() {
+        testPNGFile(context);
+      });
+
+      describe('with a non-image file selected', function() {
+        testTextFile(context);
+      });
+    });
+
+    describe('with dimension restrictions set to false', function() {
+      var context = {};
+      beforeEach(function() {
+        // using <p> instead of <input> because browser's don't allow setting the
+        // 'file' property on the input element and therefore make this more
+        // difficult to test
+        var compiled = compile('<p image-with-preview ng-model="image" dimensions="false"/>');
+        context.element = compiled.element;
+        context.$parentScope = compiled.parentScope;
+      });
+
+      describe('with an image selected', function() {
+        testDimensionsCheckFails(context);
+      });
+
+      describe('with a non-image file selected', function() {
+        testTextFile(context);
+      });
+    });
+
+    describe('with dimension restrictions which will evaluate to false', function() {
+      var context = {};
+      beforeEach(function() {
+        // using <p> instead of <input> because browser's don't allow setting the
+        // 'file' property on the input element and therefore make this more
+        // difficult to test
+        var compiled = compile('<p image-with-preview ng-model="image" dimensions="heigth == 1 && width > 1"/>');
+        context.element = compiled.element;
+        context.$parentScope = compiled.parentScope;
+      });
+
+      describe('with an image selected', function() {
+        testDimensionsCheckFails(context);
+      });
+
+      describe('with a non-image file selected', function() {
+        testTextFile(context);
+      });
+    });
+
+    describe('with dimension restrictions which will evaluate to true', function() {
+      var context = {};
+      beforeEach(function() {
+        // using <p> instead of <input> because browser's don't allow setting the
+        // 'file' property on the input element and therefore make this more
+        // difficult to test
+        var compiled = compile('<p image-with-preview ng-model="image" dimensions="height == 1 && width == 1"/>');
+        context.element = compiled.element;
+        context.$parentScope = compiled.parentScope;
+      });
+
+      describe('with an image selected', function() {
+        testPNGFile(context);
+      });
+
+      describe('with a non-image file selected', function() {
+        testTextFile(context);
+      });
+    });
+  });
+
+  describe('previewImage directive', function() {
     var context = {};
     beforeEach(function() {
       // using <p> instead of <input> because browser's don't allow setting the
