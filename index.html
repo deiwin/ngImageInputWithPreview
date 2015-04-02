@@ -37,12 +37,16 @@
               <tt>myForm.myImage.$dirty = {{myForm.myImage.$dirty}}</tt><br/>
               <tt>myForm.$valid = {{myForm.$valid}}</tt><br/>
               <tt>myForm.$error.image = {{!!myForm.$error.image}}</tt><br/>
+              <tt>myForm.$error.dimensions (height < 400) = {{!!myForm.$error.dimensions}}</tt><br/>
             </p>
             <p>
-              <input type="file" name="myImage" image-with-preview ng-model="image" accept="image/jpeg,image/png">
+              <input type="file" name="myImage" image-with-preview ng-model="image" accept="image/jpeg,image/png"  dimensions="height < 400">
             </p>
             <p class="error" ng-show="myForm.myImage.$error.image">
               Not a JPEG or a PNG!
+            </p>
+            <p class="error" ng-show="myForm.myImage.$error.dimensions">
+              Image height should be smaller than 400!
             </p>
             <img ng-show="image.src" ng-src="{{image.src}}"/>
           </form>
