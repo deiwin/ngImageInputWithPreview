@@ -50,12 +50,13 @@ describe('ngImageInputWithPreview', function() {
   };
 
   var testSelectUnselectWorks = function(type, context) {
-    var result, file, element, $parentScope;
+    var result, file, ngModel, element, $parentScope;
     beforeEach(inject(function($q, fileReader) {
       var deferred = $q.defer();
       element = context.element;
       $parentScope = context.$parentScope;
-      result = 'result data';
+      // a single pixel image
+      result = 'data:image/gif;base64,R0lGODlhAQABAPAAAP8REf///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==';
       deferred.resolve(result);
       fileReader.readAsDataUrl = jasmine.createSpy().and.returnValue(deferred.promise);
 
@@ -63,11 +64,16 @@ describe('ngImageInputWithPreview', function() {
         type: type,
       };
       element.prop('files', [file]);
-      element.triggerHandler('change');
+      ngModel = element.data('$ngModelController');
     }));
 
-    it('should set the data url the result', function() {
-      expect($parentScope.image.src).toEqual(result);
+    it('should set the data url the result', function(done) {
+
+        ngModel.$viewChangeListeners.push(function() {
+          expect($parentScope.image.src).toEqual(result);
+          done();
+        });
+        element.triggerHandler('change');
     });
 
     describe('and then unselected', function() {
@@ -78,6 +84,7 @@ describe('ngImageInputWithPreview', function() {
 
       it('should set the data url to an empty string', function() {
         expect($parentScope.image).toBeUndefined();
+        element.triggerHandler('change');
       });
     });
   };
