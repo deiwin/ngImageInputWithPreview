@@ -1,5 +1,5 @@
 /*!
- * ng-image-input-with-preview v0.0.5
+ * ng-image-input-with-preview v0.0.6
  * https://github.com/deiwin/ngImageInputWithPreview
  *
  * A FileReader based directive to easily preview and upload image files.
@@ -87,6 +87,11 @@
               allowedTypeSplit[0] === fileTypeSplit[0];
           });
         };
+        var createResolvedPromise = function() {
+          var d = $q.defer();
+          d.resolve();
+          return d.promise;
+        };
   
         return {
           restrict: 'A',
@@ -94,6 +99,7 @@
           scope: {
             image: '=ngModel',
             allowedTypes: '@accept',
+            dimensionRestrictions: '&dimensions',
           },
           link: function($scope, element, attrs, ngModel) {
             element.bind('change', function(event) {
@@ -128,19 +134,53 @@
             };
             ngModel.$asyncValidators.parsing = function(modelValue, viewValue) {
               var value = modelValue || viewValue;
-              var deferred = $q.defer();
-              if (value && value.fileReaderPromise) {
-                var promise = value.fileReaderPromise;
-                delete value.fileReaderPromise;
-                promise.then(function(dataUrl) {
-                  value.src = dataUrl;
-                  deferred.resolve(true);
-                }, function() {
-                  deferred.resolve(false);
-                });
-              } else {
-                deferred.resolve(true);
+              if (!value || !value.fileReaderPromise) {
+                return createResolvedPromise();
               }
+              // This should help keep the model value clean. At least I hope it does
+              value.fileReaderPromise.finally(function() {
+                delete value.fileReaderPromise;
+              });
+              return value.fileReaderPromise.then(function(dataUrl) {
+                value.src = dataUrl;
+              }, function() {
+                return $q.reject('Failed to parse');
+              });
+            };
+            ngModel.$asyncValidators.dimensions = function(modelValue, viewValue) {
+              if (!attrs.dimensions) {
+                return createResolvedPromise();
+              }
+              var value = modelValue || viewValue;
+              if (!value || !value.fileReaderPromise) {
+                return createResolvedPromise();
+              }
+              var deferred = $q.defer();
+              value.fileReaderPromise.then(function(dataUrl) {
+                // creating an image lets us find out its dimensions after it's loaded
+                var image = document.createElement('img');
+                image.addEventListener('load', function() {
+                  var valid = $scope.dimensionRestrictions({
+                    width: image.width,
+                    height: image.height,
+                  });
+                  $scope.$apply(function() {
+                    if (valid) {
+                      deferred.resolve();
+                    } else {
+                      deferred.reject('Invalid dimensions');
+                    }
+                  });
+                });
+                image.addEventListener('error', function() {
+                  $scope.$apply(function() {
+                    deferred.reject('Failed to detect dimensions. Not an image!');
+                  });
+                });
+                image.src = dataUrl;
+              }, function() {
+                deferred.reject('Failed to detect dimensions');
+              });
               return deferred.promise;
             };
           }
