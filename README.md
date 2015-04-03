@@ -54,7 +54,7 @@ Options
 | -----|------|-------------|------------
 | ngModel (*required*) | `string` | Assignable angular expression to data-bind to. The data URL encoded image data will be available on the `src` property. If the angular expression is a string, it will be assumed to be an URL path to an image. The path will then be converted to an object with the path available on the `src` property and with the `isPath` property set to `true`. | - |
 | accept | `string` | Works similarly to the [HTML specification](https://html.spec.whatwg.org/multipage/forms.html#attr-input-accept) to restrict the input to certain mime types. Sets `image` validation error key if the user selected file does not match. *NB: File extensions are currently not supported.* | image/jpeg,image/png |
-| dimensions | `expression` | If this expression is evaluated to be false (or falsy) the `$error.dimensions` property will be set and the image will be considered invalid. The image's dimensions are available as `height` and `width`. |
+| dimensions | `expression` | If this expression is evaluated to be false (or falsy) the `$error.dimensions` property will be set and the image will be considered invalid. The image's dimensions are available as `height` and `width`. | - |
 
 Demo !
 ------
