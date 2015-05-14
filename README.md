@@ -21,7 +21,7 @@ or
 Getting started
 -------------
 
-```
+```html
 <form name="myForm">
   <input type="file" name="myImage" image-with-preview
          ng-model="image"
@@ -42,7 +42,7 @@ Getting started
 Options
 -------
 
-```
+```html
 <input type="file" image-with-preview
 		ng-model="{string}"
 		[accept="{string}"]>
