@@ -5,7 +5,7 @@
     "Deiwin Sarjas <deiwin.sarjas@gmail.com>"
   ],
   "description": "A FileReader based directive to easily preview and upload image files.",
-  "main": "dist/ngImageInputWithPreview.js",
+  "main": "dist/ng-image-input-with-preview.js",
   "keywords": [
     "directive",
     "angular",
