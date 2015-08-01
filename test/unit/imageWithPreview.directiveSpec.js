@@ -291,6 +291,27 @@ describe('ngImageInputWithPreview', function() {
         testTextFile(context);
       });
     });
+
+    describe('with dimension restriction with multiple height/width var replacements', function() {
+      var context = {};
+      beforeEach(function() {
+        // using <p> instead of <input> because browser's don't allow setting the
+        // 'file' property on the input element and therefore make this more
+        // difficult to test
+	    var dimensions = 'height < 400 && width < 2000 && width > 0.5 * height';
+        var compiled = compile('<p image-with-preview ng-model="image" dimensions="' + dimensions + '"/>');
+        context.element = compiled.element;
+        context.$parentScope = compiled.parentScope;
+      });
+
+      describe('with an image selected', function() {
+        testPNGFile(context);
+      });
+
+      describe('with a non-image file selected', function() {
+        testTextFile(context);
+      });
+    });
   });
 
   describe('previewImage directive', function() {
