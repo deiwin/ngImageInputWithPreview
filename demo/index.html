@@ -9,7 +9,7 @@
 </head>
 
 <body>
-  <form name="myForm">
+  <form name="myForm" enctype="multipart/form-data">
     <p>
       <tt>myForm.myImage.$valid = {{myForm.myImage.$valid}}</tt>
       <br/>
@@ -21,12 +21,27 @@
       <br/>
       <tt>myForm.$error.dimensions (height < 400) = {{!!myForm.$error.dimensions}}</tt>
       <br/>
+      <tt>myForm.$error.size (size < 2097152) = {{!!myForm.$error.size}}</tt>
+      <br/>
     </p>
     <p>
-      <input type="file" name="myImage" image-with-preview ng-model="image" accept="image/jpeg,image/png" dimensions="height < 400">
+      <input
+        type="file"
+        name="myImage"
+        image-with-preview
+        ng-model="image"
+        accept="image/jpeg,image/png"
+        dimensions="height < 400"
+        size="size < 2097152">
+
       <span class="error" ng-show="myForm.myImage.$error.image">
         Not a JPEG or a PNG!
       </span>
+      <br>
+      <span class="error" ng-show="myForm.myImage.$error.size">
+        Image size should be smaler than 2MB!
+      </span>
+      <br>
       <span class="error" ng-show="myForm.myImage.$error.dimensions">
         Image height should be smaller than 400!
       </span>
