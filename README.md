@@ -17,9 +17,31 @@ Installation
 or
 
 	bower install --save ng-image-input-with-preview
+	
+### Issues with installation: 
+
+If bower installation not load module try to add this code to your `bower.json`:
+```javascript
+"overrides": {
+    "ng-image-input-with-preview": {
+      "main": "./dist/ng-image-input-with-preview.js"
+    }
+}
+```
 
 Getting started
 -------------
+
+Add dependency to your module definitinon:
+
+```javascript
+angular.module('app', [
+   // ... other dependencies
+  'ngImageInputWithPreview'
+])
+```
+
+Then you can use the directive:
 
 ```html
 <form name="myForm">
