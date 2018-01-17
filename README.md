@@ -17,10 +17,10 @@ Installation
 or
 
 	bower install --save ng-image-input-with-preview
-	
-### Issues with installation: 
 
-If bower installation not load module try to add this code to your `bower.json`:
+### Issues with installation:
+
+If bower fails to load the module, try adding the following to your `bower.json`:
 ```javascript
 "overrides": {
     "ng-image-input-with-preview": {
@@ -32,7 +32,7 @@ If bower installation not load module try to add this code to your `bower.json`:
 Getting started
 -------------
 
-Add dependency to your module definitinon:
+Include the dependency in your module definition:
 
 ```javascript
 angular.module('app', [
