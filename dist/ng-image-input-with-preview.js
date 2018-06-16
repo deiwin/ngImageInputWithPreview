@@ -1,10 +1,10 @@
 /*!
- * ng-image-input-with-preview v0.0.6
+ * ng-image-input-with-preview v0.1.0
  * https://github.com/deiwin/ngImageInputWithPreview
  *
  * A FileReader based directive to easily preview and upload image files.
  *
- * Copyright 2015, Deiwin Sarjas <deiwin.sarjas@gmail.com>
+ * Copyright 2018, Deiwin Sarjas <deiwin.sarjas@gmail.com>
  * Released under the MIT license
  */
 (function(angular, undefined) {
