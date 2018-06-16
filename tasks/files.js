@@ -22,19 +22,18 @@ var files = {
 
   demo: 'demo/*',
 
-  'package': ['package.json', 'bower.json']
+  'package': ['package.json']
 };
 
 var baseEnvironment = [].concat(
-  'bower_components/angular/angular.js',
+  'node_modules/angular/angular.js',
   files.source
 );
 
 var demoEnvironment = _.clone(baseEnvironment);
 var karmaEnvironment = _.clone(baseEnvironment);
 
-karmaEnvironment.unshift('bower_components/jasmine-moar-matchers/lib/*.js');
-karmaEnvironment.push('bower_components/angular-mocks/angular-mocks.js');
+karmaEnvironment.push('node_modules/angular-mocks/angular-mocks.js');
 
 
 files.environments.demo = demoEnvironment;
