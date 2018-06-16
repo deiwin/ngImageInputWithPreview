@@ -57,8 +57,14 @@
     "load-grunt-tasks": "~3.1.0",
     "mkdirp": "^0.5.0"
   },
-  "contributors": [],
+  "contributors": [
+    "Unknown <krokofant@users.noreply.github.com>",
+    "Deiwin Sarjas <deiwin@salemove.com>",
+    "HormCZ <horak@horm.cz>",
+    "Jakub Knejzlík <jakub.knejzlik@gmail.com>"
+  ],
   "maintainers": [
-    "Deiwin Sarjas <deiwin.sarjas@gmail.com>"
+    "Deiwin Sarjas <deiwin.sarjas@gmail.com>",
+    "Deiwin Sarjas <deiwin@users.noreply.github.com>"
   ]
 }
