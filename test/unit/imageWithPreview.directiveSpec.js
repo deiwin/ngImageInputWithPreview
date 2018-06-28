@@ -156,6 +156,58 @@ describe('ngImageInputWithPreview', function() {
     });
   };
 
+  var testSizeCheckFails = function(context) {
+    var file, ngModel, element, $parentScope;
+    beforeEach(inject(function($q, fileReader) {
+      var deferred = $q.defer();
+      element = context.element;
+      $parentScope = context.$parentScope;
+      // a single pixel image
+      var result = 'data:image/gif;base64,R0lGODlhAQABAPAAAP8REf///yH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==';
+      deferred.resolve(result);
+      fileReader.readAsDataUrl = jasmine.createSpy().and.returnValue(deferred.promise);
+      file = {
+        type: 'image/png',
+      };
+      element.prop('files', [file]);
+      element.triggerHandler('change');
+      ngModel = element.data('$ngModelController');
+    }));
+
+    it('should not set the data url', function(done) {
+      waitWhileThenRun(function() {
+        return ngModel.$pending && Object.keys(ngModel.$pending).length > 0;
+      }, function() {
+        expect($parentScope.image).toBeUndefined();
+        done();
+      });
+    });
+
+    it('should have an error', function(done) {
+      waitWhileThenRun(function() {
+        return ngModel.$pending && Object.keys(ngModel.$pending).length > 0;
+      }, function() {
+        expect(ngModel.$error.size).toBe(true);
+        done();
+      });
+    });
+
+    describe('and then unselected', function() {
+      beforeEach(function() {
+        element.prop('files', [undefined]);
+        element.triggerHandler('change');
+      });
+
+      it('should not set the data url', function() {
+        expect($parentScope.image).toBeUndefined();
+      });
+
+      it('should not have an error', function() {
+        expect(ngModel.$error.image).toBeFalsy();
+      });
+    });
+  };
+
   describe('previewImage directive with attrs', function() {
     var element, $parentScope;
     var context = {};
@@ -300,6 +352,46 @@ describe('ngImageInputWithPreview', function() {
         // difficult to test
 	    var dimensions = 'height < 400 && width < 2000 && width > 0.5 * height';
         var compiled = compile('<p image-with-preview ng-model="image" dimensions="' + dimensions + '"/>');
+        context.element = compiled.element;
+        context.$parentScope = compiled.parentScope;
+      });
+
+      describe('with an image selected', function() {
+        testPNGFile(context);
+      });
+
+      fdescribe('with a non-image file selected', function() {
+        testTextFile(context);
+      });
+    });
+
+    describe('with size restrictions which will evaluate to false', function() {
+      var context = {};
+      beforeEach(function() {
+        // using <p> instead of <input> because browser's don't allow setting the
+        // 'file' property on the input element and therefore make this more
+        // difficult to test
+        var compiled = compile('<p image-with-preview ng-model="image" size="size < 0"/>');
+        context.element = compiled.element;
+        context.$parentScope = compiled.parentScope;
+      });
+
+      describe('with an image selected', function() {
+        testSizeCheckFails(context);
+      });
+
+      describe('with a non-image file selected', function() {
+        testTextFile(context);
+      });
+    });
+
+    describe('with size restrictions which will evaluate to true', function() {
+      var context = {};
+      beforeEach(function() {
+        // using <p> instead of <input> becau§e browser's don't allow setting the
+        // 'file' property on the input element and therefore make this more
+        // difficult to test
+        var compiled = compile('<p image-with-preview ng-model="image" size="size > 5"/>');
         context.element = compiled.element;
         context.$parentScope = compiled.parentScope;
       });
