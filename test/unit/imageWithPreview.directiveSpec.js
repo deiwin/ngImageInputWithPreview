@@ -360,7 +360,7 @@ describe('ngImageInputWithPreview', function() {
         testPNGFile(context);
       });
 
-      fdescribe('with a non-image file selected', function() {
+      describe('with a non-image file selected', function() {
         testTextFile(context);
       });
     });
@@ -385,7 +385,7 @@ describe('ngImageInputWithPreview', function() {
       });
     });
 
-    describe('with size restrictions which will evaluate to true', function() {
+    fdescribe('with size restrictions which will evaluate to true', function() {
       var context = {};
       beforeEach(function() {
         // using <p> instead of <input> becau§e browser's don't allow setting the
