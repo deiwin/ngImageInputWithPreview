@@ -100,6 +100,7 @@
             image: '=ngModel',
             allowedTypes: '@accept',
             dimensionRestrictions: '&dimensions',
+            sizeRestrictions: '&size'
           },
           link: function($scope, element, attrs, ngModel) {
             element.bind('change', function(event) {
@@ -180,6 +181,44 @@
                 image.src = dataUrl;
               }, function() {
                 deferred.reject('Failed to detect dimensions');
+              });
+              return deferred.promise;
+            };
+            ngModel.$asyncValidators.size = function(modelValue, viewValue) {
+              if (!attrs.size) {
+                return createResolvedPromise();
+              }
+  
+              var value = modelValue || viewValue;
+  
+              if (!value || !value.fileReaderPromise) {
+                return createResolvedPromise();
+              }
+  
+              var deferred = $q.defer();
+  
+              value.fileReaderPromise.then(function(dataUrl) {
+  
+                var image = document.createElement('img');
+  
+                image.addEventListener('load', function() {
+                  var valid = $scope.sizeRestrictions({
+                    size: viewValue.size
+                  });
+  
+                  $scope.$apply(function() {
+                    if (valid) {
+                      deferred.resolve();
+                    } else {
+                      deferred.reject('Invalid size');
+                    }
+                  });
+  
+                });
+  
+                image.src = dataUrl;
+              }, function() {
+                deferred.reject('Failed to detect size');
               });
               return deferred.promise;
             };

@@ -21,15 +21,30 @@
       <br/>
       <tt>myForm.$error.dimensions (height < 400) = {{!!myForm.$error.dimensions}}</tt>
       <br/>
+      <tt>myForm.$error.size (size < 2097152) = {{!!myForm.$error.size}}</tt>
+      <br/>
     </p>
     <p>
-      <input type="file" name="myImage" image-with-preview ng-model="image" accept="image/jpeg,image/png" dimensions="height < 400">
+      <input type="file"
+            name="myImage"
+            image-with-preview
+            ng-model="image"
+            accept="image/jpeg,image/png"
+            dimensions="height < 400"
+            size="size < 2097152">
+      <br/>
       <span class="error" ng-show="myForm.myImage.$error.image">
         Not a JPEG or a PNG!
       </span>
+      <br/>
       <span class="error" ng-show="myForm.myImage.$error.dimensions">
         Image height should be smaller than 400!
       </span>
+      <br/>
+      <span class="error" ng-show="myForm.myImage.$error.size">
+        Image filesize should not be larger than 2MB!
+      </span>
+      <br/>
     </p>
     <img ng-show="image.src" ng-src="{{image.src}}" />
   </form>
